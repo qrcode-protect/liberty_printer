@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:blue_thermal_printer/blue_thermal_printer.dart';
@@ -13,6 +14,9 @@ class PrinterState with ChangeNotifier {
   BluetoothDevice? device;
   List<BluetoothDevice> _devices = [];
   bool connected = false;
+  Stream<QuerySnapshot<Map<String, dynamic>>>? commandeStream;
+  StreamSubscription? subscription;
+  int queue = 0;
 
   PrinterState() {
     initPlatformState();
@@ -89,23 +93,42 @@ class PrinterState with ChangeNotifier {
     // setState(() => _pressed = true);
   }
 
+  createStream(String idRestaurant) {
+    commandeStream = FirebaseFirestore.instance
+        .collection('print')
+        .where('restaurant.id', isEqualTo: idRestaurant)
+        .where('printed', isEqualTo: false)
+        .snapshots();
+    notifyListeners();
+  }
+
   listenCommands(String idRestaurant) {
-    Stream<QuerySnapshot<Map<String, dynamic>>> CommandeStream =
-        FirebaseFirestore.instance
-            .collection('print')
-            .where('restaurant.id', isEqualTo: idRestaurant)
-            .where('printed', isEqualTo: false)
-            .snapshots();
-    CommandeStream.listen((event) async {
+    if (commandeStream == null) {
+      createStream(idRestaurant);
+    }
+    subscription = commandeStream!.listen((event) async {
+      setQueue(event.docs.length);
+
       await Future.forEach(event.docs,
           (QueryDocumentSnapshot<Map<String, dynamic>> element) async {
         await printTicket(CommandeRestaurant.fromJson(element.data()));
-        FirebaseFirestore.instance
-            .collection('print')
-            .doc(element.id)
-            .update({'printed': true});
+        FirebaseFirestore.instance.collection('print').doc(element.id).delete();
       });
     });
+    notifyListeners();
+  }
+
+  setQueue(int queue) {
+    this.queue = queue;
+    notifyListeners();
+  }
+
+  disposeSubscription() {
+    if (subscription != null) {
+      subscription!.cancel();
+      subscription = null;
+      notifyListeners();
+    }
   }
 
   printTest() async {
@@ -141,8 +164,6 @@ class PrinterState with ChangeNotifier {
   }
 
   printTicket(CommandeRestaurant commandeRestaurant) async {
-    print('printe !!');
-    print(commandeRestaurant.toJson());
     await bluetooth.isConnected.then((isConnected) async {
       if (isConnected!) {
         await bluetooth.printNewLine();
@@ -223,6 +244,7 @@ class PrinterState with ChangeNotifier {
         );
         await bluetooth.printNewLine();
         await bluetooth.printNewLine();
+        await bluetooth.printQRcode('allo', 3, 3, 0);
         await bluetooth.printNewLine();
         await bluetooth.paperCut();
       }

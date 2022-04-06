@@ -1,40 +1,41 @@
 {
   "project_info": {
-    "project_number": "443840378980",
-    "project_id": "li-berty-5b442",
-    "storage_bucket": "li-berty-5b442.appspot.com"
+    "project_number": "111632664076",
+    "firebase_url": "https://li-berty-customers-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "li-berty-customers",
+    "storage_bucket": "li-berty-customers.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:443840378980:android:31b888907a1b7c42f60771",
+        "mobilesdk_app_id": "1:111632664076:android:b3ff7e15c1fba2b06d9029",
         "android_client_info": {
           "package_name": "com.example.liberty_printer"
         }
       },
       "oauth_client": [
         {
-          "client_id": "443840378980-rpt76ju6dpcn55nhgrh9gdiagjsk6bjb.apps.googleusercontent.com",
+          "client_id": "111632664076-k9hcv59rpoqs2hqe986oku8fi5i4k1f5.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyACmNNorTxOEsoL45gdauccVITKuQbXbGM"
+          "current_key": "AIzaSyB--u5w9xfRPJAI0QWkv3LrELBMit8p6Zw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "443840378980-rpt76ju6dpcn55nhgrh9gdiagjsk6bjb.apps.googleusercontent.com",
+              "client_id": "111632664076-k9hcv59rpoqs2hqe986oku8fi5i4k1f5.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "443840378980-2fmsjq4nfjqte25f8aha50rtvvueq8cp.apps.googleusercontent.com",
+              "client_id": "111632664076-46hq28daktg6djcn29qs8nf0o1o7ojdd.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "io.appliberty.customers"
+                "bundle_id": "io.appliberty.prestataires.beaute"
               }
             }
           ]
@@ -43,86 +44,42 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:443840378980:android:0850e2050636d77bf60771",
-        "android_client_info": {
-          "package_name": "io.appliberty.customers"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "443840378980-9vub7qfmv56oom2j6slbgrmjrigme4oh.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "io.appliberty.customers",
-            "certificate_hash": "114a13550670ac0e65f607d4d3b321061aea2de2"
-          }
-        },
-        {
-          "client_id": "443840378980-j40ltvffi8gpfliu5nt2gpqusv3fkaln.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "io.appliberty.customers",
-            "certificate_hash": "b3b24401ab1cc429fdd811dd081d12fb020900cc"
-          }
-        },
-        {
-          "client_id": "443840378980-rpt76ju6dpcn55nhgrh9gdiagjsk6bjb.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyACmNNorTxOEsoL45gdauccVITKuQbXbGM"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "443840378980-rpt76ju6dpcn55nhgrh9gdiagjsk6bjb.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "443840378980-2fmsjq4nfjqte25f8aha50rtvvueq8cp.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "io.appliberty.customers"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:443840378980:android:847218ef774eab0ef60771",
+        "mobilesdk_app_id": "1:111632664076:android:c84c355896148f4c6d9029",
         "android_client_info": {
           "package_name": "io.appliberty.prestataires.beaute"
         }
       },
       "oauth_client": [
         {
-          "client_id": "443840378980-rpt76ju6dpcn55nhgrh9gdiagjsk6bjb.apps.googleusercontent.com",
+          "client_id": "111632664076-41eoh2a21b255a857jdg93sg5q2uoq2s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.appliberty.prestataires.beaute",
+            "certificate_hash": "3e486a0a07c60026528b37366b357599acbe00cb"
+          }
+        },
+        {
+          "client_id": "111632664076-k9hcv59rpoqs2hqe986oku8fi5i4k1f5.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyACmNNorTxOEsoL45gdauccVITKuQbXbGM"
+          "current_key": "AIzaSyB--u5w9xfRPJAI0QWkv3LrELBMit8p6Zw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "443840378980-rpt76ju6dpcn55nhgrh9gdiagjsk6bjb.apps.googleusercontent.com",
+              "client_id": "111632664076-k9hcv59rpoqs2hqe986oku8fi5i4k1f5.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "443840378980-2fmsjq4nfjqte25f8aha50rtvvueq8cp.apps.googleusercontent.com",
+              "client_id": "111632664076-46hq28daktg6djcn29qs8nf0o1o7ojdd.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "io.appliberty.customers"
+                "bundle_id": "io.appliberty.prestataires.beaute"
               }
             }
           ]
@@ -131,34 +88,86 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:443840378980:android:841e270fb86fed40f60771",
+        "mobilesdk_app_id": "1:111632664076:android:267134e4bd7c840e6d9029",
         "android_client_info": {
           "package_name": "io.appliberty.prestataires.livraison"
         }
       },
       "oauth_client": [
         {
-          "client_id": "443840378980-rpt76ju6dpcn55nhgrh9gdiagjsk6bjb.apps.googleusercontent.com",
+          "client_id": "111632664076-m2q4go4tsv09frbt7l2q7rfmr85l4hff.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.appliberty.prestataires.livraison",
+            "certificate_hash": "3e486a0a07c60026528b37366b357599acbe00cb"
+          }
+        },
+        {
+          "client_id": "111632664076-k9hcv59rpoqs2hqe986oku8fi5i4k1f5.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyACmNNorTxOEsoL45gdauccVITKuQbXbGM"
+          "current_key": "AIzaSyB--u5w9xfRPJAI0QWkv3LrELBMit8p6Zw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "443840378980-rpt76ju6dpcn55nhgrh9gdiagjsk6bjb.apps.googleusercontent.com",
+              "client_id": "111632664076-k9hcv59rpoqs2hqe986oku8fi5i4k1f5.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "443840378980-2fmsjq4nfjqte25f8aha50rtvvueq8cp.apps.googleusercontent.com",
+              "client_id": "111632664076-46hq28daktg6djcn29qs8nf0o1o7ojdd.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "io.appliberty.customers"
+                "bundle_id": "io.appliberty.prestataires.beaute"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:111632664076:android:b061e3722cf73e886d9029",
+        "android_client_info": {
+          "package_name": "io.appliberty.prestataires.restaurant"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "111632664076-afn7g5crv8j454t02o5k68a2kqpso95g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.appliberty.prestataires.restaurant",
+            "certificate_hash": "3e486a0a07c60026528b37366b357599acbe00cb"
+          }
+        },
+        {
+          "client_id": "111632664076-k9hcv59rpoqs2hqe986oku8fi5i4k1f5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB--u5w9xfRPJAI0QWkv3LrELBMit8p6Zw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "111632664076-k9hcv59rpoqs2hqe986oku8fi5i4k1f5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "111632664076-46hq28daktg6djcn29qs8nf0o1o7ojdd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.appliberty.prestataires.beaute"
               }
             }
           ]

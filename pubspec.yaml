@@ -22,8 +22,8 @@ dependencies:
     git: https://github.com/qrcode-protect/firebase_login_package.git
   firebase_storage: ^10.2.6
   cloud_firestore: ^3.1.7
-  pdf: ^3.7.1
-  printing: ^5.7.2
+  flutter_star_prnt: ^2.3.6
+  qr_flutter: ^4.0.0
 
 
 dev_dependencies:
