@@ -108,11 +108,7 @@ class StarPrinterState with ChangeNotifier {
     }
   }
 
-  printTicket(CommandeRestaurant commandeRestaurant) async {
-    List current = commands.getCommands();
-    if (current.isNotEmpty) {
-      commands.clear();
-    }
+  Map<String, dynamic> generateWidgets(CommandeRestaurant commandeRestaurant) {
     num prix = 0;
     Widget widgetHeader = generateHeader(commandeRestaurant);
     List<Widget> widgetMenuList =
@@ -123,11 +119,28 @@ class StarPrinterState with ChangeNotifier {
       return generateMenu(e);
     }).toList();
     Widget widgetFooter = generateFooter(commandeRestaurant, prix);
+    return {
+      'prix': prix,
+      'widgetHeader': widgetHeader,
+      'widgetMenuList': widgetMenuList,
+      'widgetFooter': widgetFooter
+    };
+  }
 
-    Uint8List? bytesHeader = await createImageFromWidget(widgetHeader);
-    Uint8List? bytesFooter = await createImageFromWidget(widgetFooter);
+  printTicket(CommandeRestaurant commandeRestaurant) async {
+    List current = commands.getCommands();
+    if (current.isNotEmpty) {
+      commands.clear();
+    }
+
+    Map<String, dynamic> dataWidgets = generateWidgets(commandeRestaurant);
+
+    Uint8List? bytesHeader =
+        await createImageFromWidget(dataWidgets['widgetHeader']);
+    Uint8List? bytesFooter =
+        await createImageFromWidget(dataWidgets['widgetFooter']);
     List<Uint8List?> bytesMenuList = [];
-    await Future.forEach(widgetMenuList, (Widget element) async {
+    await Future.forEach(dataWidgets['widgetMenuList'], (Widget element) async {
       Uint8List? bytesMenu = await createImageFromWidget(element);
       bytesMenuList.add(bytesMenu);
     });
@@ -221,200 +234,278 @@ final starPrinterStateProvider =
 });
 
 Widget generateHeader(CommandeRestaurant commandeRestaurant) {
-  return Column(
-    children: [
-      const Align(
-        alignment: Alignment.center,
-        child: Text(
-          'Li-Berty',
-          style: TextStyle(
-            fontSize: 48,
-            fontWeight: FontWeight.w300,
-            color: Colors.black,
+  return SizedBox(
+    width: 500,
+    child: Column(
+      children: [
+        const Align(
+          alignment: Alignment.center,
+          child: Text(
+            'LI-BERTY',
+            style: TextStyle(
+              fontSize: 48,
+              fontWeight: FontWeight.w300,
+              color: Colors.black,
+            ),
           ),
         ),
-      ),
-      Align(
-        alignment: Alignment.center,
-        child: Text(
-          commandeRestaurant.restaurant.nom != null
-              ? commandeRestaurant.restaurant.nom!
-              : '',
+        Align(
+          alignment: Alignment.center,
+          child: Text(
+            commandeRestaurant.restaurant.nom != null
+                ? commandeRestaurant.restaurant.nom!
+                : '',
+            style: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.normal,
+              fontSize: 36,
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        const Divider(),
+        const SizedBox(
+          height: 10,
+        ),
+        RichText(
+          text: TextSpan(
+            text: 'N° commande: ',
+            style: const TextStyle(
+                color: Colors.black, fontSize: 20, fontWeight: FontWeight.w300),
+            children: [
+              TextSpan(
+                text: '#${commandeRestaurant.id.substring(0, 4).toString()}',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Text(
+          'Date : ${FormatDate().formatTicket(commandeRestaurant.date)}',
           style: const TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.normal,
-            fontSize: 36,
+              color: Colors.black, fontSize: 20, fontWeight: FontWeight.w300),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        const Divider(),
+        const SizedBox(
+          height: 10,
+        ),
+        Align(
+          alignment: Alignment.center,
+          child: Text(
+            commandeRestaurant.livraisonStatus != null
+                ? 'Livraison'
+                : 'Emporter',
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Colors.black, fontSize: 28),
           ),
         ),
-      ),
-      const Divider(),
-      Text(
-        'Num de commande : #${commandeRestaurant.id.substring(commandeRestaurant.id.length - 5)}',
-        style: const TextStyle(
-            color: Colors.black, fontSize: 20, fontWeight: FontWeight.w300),
-      ),
-      Text(
-        'Date : ${FormatDate().formatTicket(commandeRestaurant.date)}',
-        style: const TextStyle(
-            color: Colors.black, fontSize: 20, fontWeight: FontWeight.w300),
-      ),
-      const Divider(),
-      Align(
-        alignment: Alignment.center,
-        child: Text(
-          commandeRestaurant.livraisonStatus != null ? 'Livraison' : 'Emporter',
-          textAlign: TextAlign.center,
-          style: const TextStyle(color: Colors.black, fontSize: 28),
+        const Text(
+          'Detail :',
+          style: TextStyle(color: Colors.black, fontSize: 26),
         ),
-      ),
-      const Text(
-        'Detail :',
-        style: TextStyle(color: Colors.black, fontSize: 26),
-      ),
-    ],
+        const SizedBox(
+          height: 10,
+        ),
+      ],
+    ),
   );
 }
 
 Widget generateMenu(CommandeRestaurantPanier menu) {
   List<RestaurantProduit>? sousMenuRequis = menu.listRestaurantProduitRequis;
   List<RestaurantProduit>? sousMenu = menu.listRestaurantProduit;
-  return Column(
-    children: [
-      Table(
-        columnWidths: const {
-          0: FixedColumnWidth(40),
-          2: FixedColumnWidth(75),
-        },
-        children: [
-          TableRow(
-            children: [
-              Text(
-                menu.quantite.toString(),
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 22,
-                  fontWeight: FontWeight.w300,
+  return SizedBox(
+    width: 500,
+    child: Column(
+      children: [
+        const SizedBox(
+          height: 10,
+        ),
+        Table(
+          columnWidths: const {
+            0: FixedColumnWidth(40),
+            2: FixedColumnWidth(75),
+          },
+          children: [
+            TableRow(
+              children: [
+                Text(
+                  menu.quantite.toString(),
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w300,
+                  ),
                 ),
-              ),
-              Text(
-                menu.menu!.nom,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 22,
+                Text(
+                  menu.menu!.nom,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 22,
+                  ),
                 ),
-              ),
-              Text(
-                '${menu.prix.toString()}€',
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 22,
-                  fontWeight: FontWeight.w300,
+                Text(
+                  '${menu.prix.toString()}€',
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w300,
+                  ),
+                )
+              ],
+            ),
+          ],
+        ),
+        sousMenuRequis != null
+            ? Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Table(
+                  columnWidths: const {
+                    0: FixedColumnWidth(40),
+                    2: FixedColumnWidth(75),
+                  },
+                  children: sousMenuRequis
+                      .map(
+                        (elementSousMenuRequis) => TableRow(
+                          children: [
+                            const SizedBox.shrink(),
+                            Text(
+                              elementSousMenuRequis.nom!,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                            const SizedBox.shrink(),
+                          ],
+                        ),
+                      )
+                      .toList(),
                 ),
               )
-            ],
-          ),
-        ],
-      ),
-      sousMenuRequis != null
-          ? Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Table(
-                columnWidths: const {
-                  0: FixedColumnWidth(40),
-                  2: FixedColumnWidth(75),
-                },
-                children: sousMenuRequis
-                    .map(
-                      (elementSousMenuRequis) => TableRow(
-                        children: [
-                          const SizedBox.shrink(),
-                          Text(
-                            elementSousMenuRequis.nom!,
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w300,
+            : const SizedBox.shrink(),
+        sousMenu != null
+            ? Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Table(
+                  columnWidths: const {
+                    0: FixedColumnWidth(40),
+                    2: FixedColumnWidth(75),
+                  },
+                  children: sousMenu
+                      .map(
+                        (elementSousMenu) => TableRow(
+                          children: [
+                            const SizedBox.shrink(),
+                            Text(
+                              elementSousMenu.nom!,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w300,
+                              ),
                             ),
-                          ),
-                          const SizedBox.shrink(),
-                        ],
-                      ),
-                    )
-                    .toList(),
-              ),
-            )
-          : const SizedBox.shrink(),
-      sousMenu != null
-          ? Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Table(
-                columnWidths: const {
-                  0: FixedColumnWidth(40),
-                  2: FixedColumnWidth(75),
-                },
-                children: sousMenu
-                    .map(
-                      (elementSousMenu) => TableRow(
-                        children: [
-                          const SizedBox.shrink(),
-                          Text(
-                            elementSousMenu.nom!,
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w300,
-                            ),
-                          ),
-                          const SizedBox.shrink(),
-                        ],
-                      ),
-                    )
-                    .toList(),
-              ),
-            )
-          : const SizedBox.shrink(),
-    ],
+                            const SizedBox.shrink(),
+                          ],
+                        ),
+                      )
+                      .toList(),
+                ),
+              )
+            : const SizedBox.shrink(),
+        const SizedBox(
+          height: 10,
+        ),
+      ],
+    ),
   );
 }
 
 Widget generateFooter(CommandeRestaurant commandeRestaurant, prix) {
-  return Column(
-    children: [
-      const Divider(),
-      Text(
-        'Total : $prix€',
-        style: const TextStyle(
-          color: Colors.black,
-          fontSize: 24,
-          fontWeight: FontWeight.w300,
-        ),
-      ),
-      Text(
-        'Client : ${commandeRestaurant.client.nom}',
-        style: const TextStyle(
-          color: Colors.black,
-          fontSize: 24,
-          fontWeight: FontWeight.w300,
-        ),
-      ),
-      if (commandeRestaurant.livreur != null) ...[
+  return SizedBox(
+    width: 500,
+    child: Column(
+      children: [
         const Divider(),
+        const SizedBox(
+          height: 10,
+        ),
         Text(
-          'Livreur : ${commandeRestaurant.livreur!.nom}',
+          'Total : $prix€',
           style: const TextStyle(
             color: Colors.black,
             fontSize: 24,
             fontWeight: FontWeight.w300,
           ),
         ),
-        Center(
-          child: SizedBox(
-            width: 250,
-            height: 250,
-            child: QrImage(data: commandeRestaurant.id),
+        Text(
+          'Client : ${commandeRestaurant.client.nom}',
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 24,
+            fontWeight: FontWeight.w300,
           ),
         ),
-      ]
-    ],
+        if (commandeRestaurant.livreur != null) ...[
+          const SizedBox(
+            height: 10,
+          ),
+          const Divider(),
+          const SizedBox(
+            height: 10,
+          ),
+          Text(
+            'Livreur : ${commandeRestaurant.livreur!.nom}',
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 24,
+              fontWeight: FontWeight.w300,
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Center(
+            child: SizedBox(
+              width: 200,
+              height: 200,
+              child: QrImage(data: commandeRestaurant.id),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          commandeRestaurant.codeValidation != null
+              ? RichText(
+                  text: TextSpan(
+                    text: 'Code de validation : ',
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w300,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: commandeRestaurant.codeValidation,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                )
+              : const SizedBox.shrink(),
+          const SizedBox(
+            height: 10,
+          ),
+        ]
+      ],
+    ),
   );
 }

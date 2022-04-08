@@ -177,7 +177,7 @@ class PrinterState with ChangeNotifier {
         await bluetooth.printNewLine();
         await bluetooth.printLeftRight(
           'Num de commande',
-          '#${commandeRestaurant.id.substring(commandeRestaurant.id.length - 5)}',
+          '#${commandeRestaurant.id}',
           1,
         );
         await bluetooth.printLeftRight(
@@ -244,7 +244,14 @@ class PrinterState with ChangeNotifier {
         );
         await bluetooth.printNewLine();
         await bluetooth.printNewLine();
-        await bluetooth.printQRcode('allo', 3, 3, 0);
+        await bluetooth.printQRcode(commandeRestaurant.id, 3, 3, 0);
+        commandeRestaurant.codeValidation != null
+            ? await bluetooth.printCustom(
+                commandeRestaurant.codeValidation!,
+                2,
+                1,
+              )
+            : null;
         await bluetooth.printNewLine();
         await bluetooth.paperCut();
       }

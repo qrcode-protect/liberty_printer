@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_star_prnt/flutter_star_prnt.dart';
 import 'package:liberty_printer/controller/start_print_controller.dart';
 import 'package:liberty_printer/state/app_state.dart';
+import 'package:liberty_printer/view/test_view_ticket.dart';
 import 'package:libertymodel/libertymodel.dart';
 
 class StarPrintPage extends ConsumerStatefulWidget {
@@ -101,6 +102,34 @@ class _StarPrintPageState extends ConsumerState<StarPrintPage> {
                     ),
                   ),
                 ),
+                // SizedBox(
+                //   height: 50,
+                //   width: 150,
+                //   child: ElevatedButton(
+                //     onPressed: () async {
+                //       CommandeRestaurant commandeRestaurant =
+                //           await FirebaseFirestore.instance
+                //               .collection('commandes_restauration')
+                //               .doc('aHWmM2h0HQpBL17gcMdm')
+                //               .get()
+                //               .then(
+                //                 (value) =>
+                //                     CommandeRestaurant.fromJson(value.data()!),
+                //               );
+                //       Navigator.of(context).push(
+                //         MaterialPageRoute(
+                //           builder: (context) => TestViewTicket(
+                //             commandeRestaurant: commandeRestaurant,
+                //           ),
+                //         ),
+                //       );
+                //     },
+                //     child: const Text(
+                //       'Voir le ticket',
+                //       textAlign: TextAlign.center,
+                //     ),
+                //   ),
+                // ),
                 const Spacer(),
                 Text('File d\'attente: ${printerState.queue}')
               ],

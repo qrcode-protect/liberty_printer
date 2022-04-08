@@ -4,9 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:liberty_printer/state/app_state.dart';
 import 'package:liberty_printer/view/choice_page.dart';
 import 'package:liberty_printer/view/login_page.dart';
-import 'package:liberty_printer/view/print_page.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:liberty_printer/view/star_print_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
