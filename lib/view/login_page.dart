@@ -42,9 +42,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black,
                                   ),
+                          textAlign: TextAlign.center,
                         ),
                         subtitle: const Text(
-                            'Utilisez votre nom d\'utilisateur et votre mot de passe pour vous connecter au Li-berty Restaurant Manager.'),
+                            'Utilisez votre nom d\'utilisateur et votre mot de passe (identique à celui du compte du restaurant) pour vous connecter a Liberty Printer.'),
                       ),
                       SizedBox(
                         width: double.infinity,

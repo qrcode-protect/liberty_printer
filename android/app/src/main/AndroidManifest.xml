@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.liberty_printer">
+    package="io.liberty.printer">
    <application
-        android:label="liberty_printer"
+        android:label="Liberty Printer"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

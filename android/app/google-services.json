@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:443840378980:android:31b888907a1b7c42f60771",
         "android_client_info": {
-          "package_name": "com.example.liberty_printer"
+          "package_name": "io.liberty.printer"
         }
       },
       "oauth_client": [

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:blue_thermal_printer/blue_thermal_printer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -32,7 +31,8 @@ class PrinterState with ChangeNotifier {
     try {
       devices = await bluetooth.getBondedDevices();
     } on PlatformException {
-      // TODO - Error
+      // TODO -
+      rethrow;
     }
 
     bluetooth.onStateChanged().listen((state) {

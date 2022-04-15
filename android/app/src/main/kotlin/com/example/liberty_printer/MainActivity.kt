@@ -1,4 +1,4 @@
-package com.example.liberty_printer
+package io.liberty.printer
 
 import io.flutter.embedding.android.FlutterActivity
 
