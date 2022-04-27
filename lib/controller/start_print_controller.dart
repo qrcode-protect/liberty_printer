@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_star_prnt/flutter_star_prnt.dart';
 import 'package:liberty_printer/services/date_format.dart';
 import 'package:libertymodel/libertymodel.dart';
+import 'package:logger/logger.dart';
 import 'dart:ui' as ui;
 
 import 'package:qr_flutter/qr_flutter.dart';
@@ -20,10 +21,25 @@ class StarPrinterState with ChangeNotifier {
   Stream<QuerySnapshot<Map<String, dynamic>>>? commandeStream;
   StreamSubscription? subscription;
   int queue = 0;
+  Logger logger = Logger(
+    printer: PrettyPrinter(
+      printTime: true,
+    ),
+    output: StreamOutput(),
+  );
 
   init() async {
+    loadInit = true;
+    notifyListeners();
     portsList = await StarPrnt.portDiscovery(StarPortType.All);
+    print(portsList);
     loadInit = false;
+    notifyListeners();
+  }
+
+  reset() {
+    portsList = [];
+    port = null;
     notifyListeners();
   }
 
@@ -57,18 +73,29 @@ class StarPrinterState with ChangeNotifier {
   }
 
   setPort(PortInfo? port) {
+    if (port != null) {
+      logger.i('Connect to : ${port.modelName} ${port.macAddress} ');
+    } else if (this.port != null) {
+      logger.i(
+          'Disconnect from : ${this.port!.modelName} ${this.port!.macAddress}');
+    }
     this.port = port;
     notifyListeners();
   }
 
   printTest() async {
-    commands.push({'appendBitmapText': "Hello World €"});
+    try {
+      commands.push({'appendBitmapText': "Hello World €"});
 
-    await StarPrnt.sendCommands(
-      portName: port!.portName!,
-      emulation: 'StarGraphic',
-      printCommands: commands,
-    );
+      await StarPrnt.sendCommands(
+        portName: port!.portName!,
+        emulation: 'StarGraphic',
+        printCommands: commands,
+      );
+      logger.i('Print test success on ${port!.portName!}');
+    } catch (e) {
+      logger.e('Print test error', e);
+    }
   }
 
   createStream(String idRestaurant) {
@@ -77,6 +104,7 @@ class StarPrinterState with ChangeNotifier {
         .where('restaurant.id', isEqualTo: idRestaurant)
         .where('printed', isEqualTo: false)
         .snapshots();
+    logger.i('Stream created with restaurant id: ${idRestaurant}');
     notifyListeners();
   }
 
@@ -92,10 +120,12 @@ class StarPrinterState with ChangeNotifier {
         FirebaseFirestore.instance.collection('print').doc(element.id).delete();
       });
     });
+    logger.i('Start listen stream');
     notifyListeners();
   }
 
   setQueue(int queue) {
+    logger.i('Update queue: ${this.queue} -> $queue');
     this.queue = queue;
     notifyListeners();
   }
@@ -104,65 +134,82 @@ class StarPrinterState with ChangeNotifier {
     if (subscription != null) {
       subscription!.cancel();
       subscription = null;
+      logger.i('Listen stream disposed');
       notifyListeners();
     }
   }
 
   Map<String, dynamic> generateWidgets(CommandeRestaurant commandeRestaurant) {
-    num prix = 0;
-    Widget widgetHeader = generateHeader(commandeRestaurant);
-    List<Widget> widgetMenuList =
-        commandeRestaurant.restaurantCommande.map((e) {
-      if (e.prix != null) {
-        prix = prix + e.prix!;
-      }
-      return generateMenu(e);
-    }).toList();
-    Widget widgetFooter = generateFooter(commandeRestaurant, prix);
-    return {
-      'prix': prix,
-      'widgetHeader': widgetHeader,
-      'widgetMenuList': widgetMenuList,
-      'widgetFooter': widgetFooter
-    };
+    try {
+      num prix = 0;
+      Widget widgetHeader = generateHeader(commandeRestaurant);
+      List<Widget> widgetMenuList =
+          commandeRestaurant.restaurantCommande.map((e) {
+        if (e.prix != null) {
+          prix = prix + e.prix!;
+        }
+        return generateMenu(e);
+      }).toList();
+      Widget widgetFooter = generateFooter(commandeRestaurant, prix);
+      logger.i(
+          'Widget generated without error for commande : ${commandeRestaurant.id}');
+      return {
+        'prix': prix,
+        'widgetHeader': widgetHeader,
+        'widgetMenuList': widgetMenuList,
+        'widgetFooter': widgetFooter
+      };
+    } catch (e) {
+      logger.e(
+          'Error during widget creation for commande : ${commandeRestaurant.id}',
+          e);
+      rethrow;
+    }
   }
 
   printTicket(CommandeRestaurant commandeRestaurant) async {
-    List current = commands.getCommands();
-    if (current.isNotEmpty) {
-      commands.clear();
-    }
-
-    Map<String, dynamic> dataWidgets = generateWidgets(commandeRestaurant);
-
-    Uint8List? bytesHeader =
-        await createImageFromWidget(dataWidgets['widgetHeader']);
-    Uint8List? bytesFooter =
-        await createImageFromWidget(dataWidgets['widgetFooter']);
-    List<Uint8List?> bytesMenuList = [];
-    await Future.forEach(dataWidgets['widgetMenuList'], (Widget element) async {
-      Uint8List? bytesMenu = await createImageFromWidget(element);
-      bytesMenuList.add(bytesMenu);
-    });
-
-    bytesHeader != null
-        ? commands.appendBitmapByte(byteData: bytesHeader, width: 600)
-        : null;
-    for (var element in bytesMenuList) {
-      if (element != null) {
-        commands.appendBitmapByte(byteData: element, width: 600);
+    try {
+      List current = commands.getCommands();
+      if (current.isNotEmpty) {
+        commands.clear();
       }
-    }
-    bytesFooter != null
-        ? commands.appendBitmapByte(byteData: bytesFooter, width: 600)
-        : null;
-    commands.appendCutPaper(StarCutPaperAction.PartialCutWithFeed);
 
-    await StarPrnt.sendCommands(
-      portName: port!.portName!,
-      emulation: 'StarGraphic',
-      printCommands: commands,
-    );
+      Map<String, dynamic> dataWidgets = generateWidgets(commandeRestaurant);
+
+      Uint8List? bytesHeader =
+          await createImageFromWidget(dataWidgets['widgetHeader']);
+      Uint8List? bytesFooter =
+          await createImageFromWidget(dataWidgets['widgetFooter']);
+      List<Uint8List?> bytesMenuList = [];
+      await Future.forEach(dataWidgets['widgetMenuList'],
+          (Widget element) async {
+        Uint8List? bytesMenu = await createImageFromWidget(element);
+        bytesMenuList.add(bytesMenu);
+      });
+
+      bytesHeader != null
+          ? commands.appendBitmapByte(byteData: bytesHeader, width: 600)
+          : null;
+      for (var element in bytesMenuList) {
+        if (element != null) {
+          commands.appendBitmapByte(byteData: element, width: 600);
+        }
+      }
+      bytesFooter != null
+          ? commands.appendBitmapByte(byteData: bytesFooter, width: 600)
+          : null;
+      commands.appendCutPaper(StarCutPaperAction.PartialCutWithFeed);
+
+      await StarPrnt.sendCommands(
+        portName: port!.portName!,
+        emulation: 'StarGraphic',
+        printCommands: commands,
+      );
+      logger
+          .i('Widget sent to printer for commande : ${commandeRestaurant.id}');
+    } catch (e) {
+      logger.e('Print ticket error', e);
+    }
   }
 
   Future<Uint8List?> createImageFromWidget(

@@ -5,7 +5,6 @@ import 'package:flutter_star_prnt/flutter_star_prnt.dart';
 import 'package:liberty_printer/controller/start_print_controller.dart';
 import 'package:liberty_printer/state/app_state.dart';
 import 'package:liberty_printer/view/test_view_ticket.dart';
-import 'package:libertymodel/libertymodel.dart';
 
 class StarPrintPage extends ConsumerStatefulWidget {
   const StarPrintPage({Key? key}) : super(key: key);
@@ -50,13 +49,21 @@ class _StarPrintPageState extends ConsumerState<StarPrintPage> {
                       ),
                     ),
                     IconButton(
-                        onPressed: () {
-                          printerState.setPort(null);
-                        },
-                        icon: const Icon(
-                          Icons.cancel,
-                          color: Color.fromARGB(255, 153, 34, 34),
-                        ))
+                      onPressed: () {
+                        printerState.reset();
+                        printerState.init();
+                      },
+                      icon: const Icon(Icons.replay),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        printerState.setPort(null);
+                      },
+                      icon: const Icon(
+                        Icons.cancel,
+                        color: Color.fromARGB(255, 153, 34, 34),
+                      ),
+                    )
                   ],
                 ),
                 const SizedBox(
@@ -92,8 +99,8 @@ class _StarPrintPageState extends ConsumerState<StarPrintPage> {
                   width: 150,
                   child: ElevatedButton(
                     onPressed: printerState.port != null
-                        ? () {
-                            printerState.printTest();
+                        ? () async {
+                            await printerState.printTest();
                           }
                         : null,
                     child: const Text(
@@ -110,7 +117,7 @@ class _StarPrintPageState extends ConsumerState<StarPrintPage> {
                 //       CommandeRestaurant commandeRestaurant =
                 //           await FirebaseFirestore.instance
                 //               .collection('commandes_restauration')
-                //               .doc('aHWmM2h0HQpBL17gcMdm')
+                //               .doc('KM63cyzueiW03jU55tK6')
                 //               .get()
                 //               .then(
                 //                 (value) =>
