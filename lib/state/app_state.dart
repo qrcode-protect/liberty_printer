@@ -32,7 +32,6 @@ class AppStateProvider with ChangeNotifier {
   }
 
   getUtilisateur() async {
-    print('getUtilisateur');
     utilisateur = await Data().getUtilisateur();
     notifyListeners();
   }

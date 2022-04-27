@@ -32,7 +32,6 @@ class StarPrinterState with ChangeNotifier {
     loadInit = true;
     notifyListeners();
     portsList = await StarPrnt.portDiscovery(StarPortType.All);
-    print(portsList);
     loadInit = false;
     notifyListeners();
   }
@@ -104,7 +103,7 @@ class StarPrinterState with ChangeNotifier {
         .where('restaurant.id', isEqualTo: idRestaurant)
         .where('printed', isEqualTo: false)
         .snapshots();
-    logger.i('Stream created with restaurant id: ${idRestaurant}');
+    logger.i('Stream created with restaurant id: $idRestaurant');
     notifyListeners();
   }
 

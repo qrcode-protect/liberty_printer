@@ -38,7 +38,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  //TODO: release new version apres avoir installé V2
   @override
   Widget build(BuildContext context) {
     Future<AppUpdateInfo?> checkForUpdate() async {
@@ -54,8 +53,6 @@ class _HomeState extends State<Home> {
         future: checkForUpdate(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            print(snapshot);
-            print(snapshot.data);
             if (snapshot.hasData && snapshot.data != null) {
               if (snapshot.data!.updateAvailability ==
                   UpdateAvailability.updateAvailable) {

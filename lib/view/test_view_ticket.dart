@@ -16,7 +16,7 @@ class TestViewTicket extends ConsumerWidget {
     List<Widget> listMenu = dataWidgets['widgetMenuList'] as List<Widget>;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Vue du ticket'),
+        title: const Text('Vue du ticket'),
       ),
       body: SingleChildScrollView(
         child: Column(

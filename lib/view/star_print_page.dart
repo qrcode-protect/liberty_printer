@@ -1,10 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_star_prnt/flutter_star_prnt.dart';
 import 'package:liberty_printer/controller/start_print_controller.dart';
 import 'package:liberty_printer/state/app_state.dart';
-import 'package:liberty_printer/view/test_view_ticket.dart';
 
 class StarPrintPage extends ConsumerStatefulWidget {
   const StarPrintPage({Key? key}) : super(key: key);
@@ -25,7 +23,6 @@ class _StarPrintPageState extends ConsumerState<StarPrintPage> {
   @override
   Widget build(BuildContext context) {
     final printerState = ref.watch(starPrinterStateProvider);
-    final appState = ref.watch(appStateProvider);
     return Scaffold(
       appBar: AppBar(),
       body: Stack(

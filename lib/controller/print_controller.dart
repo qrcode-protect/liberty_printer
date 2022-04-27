@@ -31,7 +31,6 @@ class PrinterState with ChangeNotifier {
     try {
       devices = await bluetooth.getBondedDevices();
     } on PlatformException {
-      // TODO -
       rethrow;
     }
 
