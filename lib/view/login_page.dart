@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:liberty_printer/state/app_state.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -196,6 +197,27 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     .copyWith(color: Colors.white),
               ),
             ),
+            const Spacer(),
+            FutureBuilder<PackageInfo>(
+              future: PackageInfo.fromPlatform(),
+              builder: (context, snapshot) {
+                print(snapshot.data!.buildNumber);
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.data != null) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'v${snapshot.data!.version} build ${snapshot.data!.buildNumber}',
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    );
+                  }
+                } else {
+                  return const SizedBox.shrink();
+                }
+                return const SizedBox.shrink();
+              },
+            )
           ],
         ),
       ),
