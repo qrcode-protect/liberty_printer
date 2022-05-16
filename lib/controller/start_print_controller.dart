@@ -398,7 +398,7 @@ Widget generateMenu(CommandeRestaurantPanier menu) {
                   ),
                 ),
                 Text(
-                  '${menu.prix.toString()}€',
+                  '${menu.prix!.toStringAsFixed(2)}€',
                   style: const TextStyle(
                     color: Colors.black,
                     fontSize: 22,
@@ -475,17 +475,47 @@ Widget generateMenu(CommandeRestaurantPanier menu) {
   );
 }
 
-Widget generateFooter(CommandeRestaurant commandeRestaurant, prix) {
+Widget generateFooter(CommandeRestaurant commandeRestaurant, num prix) {
   return SizedBox(
     width: 500,
     child: Column(
       children: [
+        ((commandeRestaurant.remarque != null) &&
+                (commandeRestaurant.remarque!.isNotEmpty))
+            ? Column(
+                children: [
+                  const Divider(),
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                      ),
+                      text: 'Remarque : ',
+                      children: [
+                        TextSpan(
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w300,
+                            ),
+                            text: commandeRestaurant.remarque!)
+                      ],
+                    ),
+                  ),
+                  const Divider(),
+                ],
+              )
+            : const SizedBox.shrink(),
+        const SizedBox(
+          height: 10,
+        ),
         const Divider(),
         const SizedBox(
           height: 10,
         ),
         Text(
-          'Total : $prix€',
+          'Total : ${prix.toStringAsFixed(2)}€',
           style: const TextStyle(
             color: Colors.black,
             fontSize: 24,

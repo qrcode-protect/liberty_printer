@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_star_prnt/flutter_star_prnt.dart';
 import 'package:liberty_printer/controller/start_print_controller.dart';
 import 'package:liberty_printer/state/app_state.dart';
+import 'package:liberty_printer/view/test_view_ticket.dart';
+import 'package:libertymodel/models/models.dart';
 
 class StarPrintPage extends ConsumerStatefulWidget {
   const StarPrintPage({Key? key}) : super(key: key);
@@ -114,7 +117,7 @@ class _StarPrintPageState extends ConsumerState<StarPrintPage> {
                 //       CommandeRestaurant commandeRestaurant =
                 //           await FirebaseFirestore.instance
                 //               .collection('commandes_restauration')
-                //               .doc('KM63cyzueiW03jU55tK6')
+                //               .doc('oM02LlHtUEsdFuVe3VNh')
                 //               .get()
                 //               .then(
                 //                 (value) =>
